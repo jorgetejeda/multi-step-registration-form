@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 
-const AccountsFields = ({ fieldsValue, saveValues, nextStep }) => {
-  const [input, setInput] = useState({
+export default function AccountsFields({ fieldsValue, saveValues, nextStep }){
+  const [data, setData] = useState({
     name: null,
     email: null,
     password: null,
   });
 
   const handleChange = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value });
+    setData({ ...data, [e.target.name]: e.target.value });
   };
 
   const saveAndContinue = () => {
-    saveValues(input);
+    saveValues(data);
     nextStep();
   };
+
+
   return (
     <div>
       <h1>Account - Step 1</h1>
@@ -37,9 +39,9 @@ const AccountsFields = ({ fieldsValue, saveValues, nextStep }) => {
         />
       </div>
       <div className="form-group">
-        <label>Email</label>
+        <label>Password</label>
         <input
-          type="password"
+          type="text"
           defaultValue={fieldsValue.password}
           name="password"
           onChange={handleChange}
@@ -49,5 +51,3 @@ const AccountsFields = ({ fieldsValue, saveValues, nextStep }) => {
     </div>
   );
 };
-
-export default AccountsFields;
