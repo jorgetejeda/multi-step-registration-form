@@ -1,31 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Confirmation from "./ Confirmation";
-import AccountsFields from "./AccountFields";
-import SurveyFields from "./SurveryFields";
+import PersonalForm from "./PersonalForm";
+import UserForm from "./UserForm";
 import Success from "./Success";
 
 export default function Registration() {
-  const [react, setReact] = useState("Bayron");
-
   const [step, setSteps] = useState(1);
   const [fields, setFields] = useState({
     name: null,
+    lastName: null,
+    phoneNumber: null,
+    user: null,
     email: null,
     password: null,
-    age: null,
+    address: null,
   });
 
-  useEffect(() => {
-    console.log('useEffect',fields);
-  }, [fields]);
-
-  const saveValues = (data) => {
-    setFields((prevFields) => ({ ...prevFields, ...data }));
-    console.log("incoming data", data);
-    console.log("local data", fields);
-  };
-
-  const nextStep = () => {
+  const nextStep = (e) => {
+    e.preventDefault();
     setSteps(step + 1);
   };
 
@@ -33,27 +25,24 @@ export default function Registration() {
     setSteps(step - 1);
   };
 
-  const submitRegistration = () => {
-    console.log("registro");
+  const handleChange = (e) => {
+    setFields({ ...fields, [e.target.name]: e.target.value });
   };
 
   switch (step) {
     case 1:
       return (
-        <div>
-          <h1>{react}</h1>
-          <AccountsFields
-            fieldsValue={fields}
-            saveValues={saveValues}
-            nextStep={nextStep}
-          />
-          <button onClick={() => setReact("myName")}>React</button>
-        </div>
+        <PersonalForm
+          fields={fields}
+          nextStep={nextStep}
+          handleChange={handleChange}
+        />
       );
     case 2:
       return (
-        <SurveyFields
-          fieldsValue={fields}
+        <UserForm
+          fields={fields}
+          handleChange={handleChange}
           nextStep={nextStep}
           previousStep={previousStep}
         />
@@ -61,13 +50,14 @@ export default function Registration() {
     case 3:
       return (
         <Confirmation
-          fieldValues={fields}
+          fields={fields}
+          handleChange={handleChange}
           previousStep={previousStep}
-          submitRegistration={submitRegistration}
+          nextStep={nextStep}
         />
       );
     case 4:
-      return <Success fieldValues={fields} />;
+      return <Success fields={fields} previousStep={previousStep} />;
     default:
       return <h1>Unexpect Error</h1>;
   }
